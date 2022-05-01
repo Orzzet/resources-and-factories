@@ -14,13 +14,13 @@ import (
 func run() error {
 	db, err := badgerStorage.New()
 	if err != nil {
-		log.Fatal("couldn't initialize database")
 		return err
 	}
 	defer func(db *badger.DB) {
 		err := db.Close()
 		if err != nil {
-			log.Fatal("failed closing database")
+			log.Println("failed closing database")
+			log.Fatal(err)
 			return
 		}
 	}(db)
@@ -35,7 +35,8 @@ func run() error {
 			time.Sleep(1 * time.Second)
 			err := service.EngineTick()
 			if err != nil {
-				log.Fatal("failed processing next tick")
+				log.Println("failed processing next tick")
+				log.Fatal(err)
 				return
 			}
 		}

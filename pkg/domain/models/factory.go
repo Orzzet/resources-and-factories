@@ -28,9 +28,6 @@ type Factory struct {
 
 func GetFactoriesStats() FactoriesStats {
 	factoriesStats := make(FactoriesStats)
-	factoriesStats[IronFactory] = make(map[int]FactoryStats)
-	factoriesStats[CopperFactory] = make(map[int]FactoryStats)
-	factoriesStats[GoldFactory] = make(map[int]FactoryStats)
 	factoriesStats[IronFactory] = map[int]FactoryStats{
 		1: {
 			Level:               1,

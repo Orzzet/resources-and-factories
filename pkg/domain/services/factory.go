@@ -8,6 +8,7 @@ import (
 )
 
 func (s *Service) getFactories() (factories []models.Factory, err error) {
+	factoriesStats := models.GetFactoriesStats()
 	err = s.DB.View(func(txn *badger.Txn) error {
 		for _, factoryType := range []models.FactoryType{models.IronFactory, models.CopperFactory, models.GoldFactory} {
 			serializedFactory, err := txn.Get([]byte(factoryType))
@@ -23,6 +24,7 @@ func (s *Service) getFactories() (factories []models.Factory, err error) {
 			if err := d.Decode(&factory); err != nil {
 				return err
 			}
+			factory.FactoryStats = factoriesStats[factory.FactoryType][int(factory.Level)]
 			factories = append(factories, factory)
 		}
 		return nil
