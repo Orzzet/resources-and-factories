@@ -9,5 +9,15 @@ func New() (*badger.DB, error) {
 	if err != nil {
 		return nil, err
 	}
+	updates := make(map[string]string)
+	txn := db.NewTransaction(true)
+	for k, v := range updates {
+		if err := txn.Set([]byte(k), []byte(v)); err == badger.ErrTxnTooBig {
+			_ = txn.Commit()
+			txn = db.NewTransaction(true)
+			_ = txn.Set([]byte(k), []byte(v))
+		}
+	}
+	_ = txn.Commit()
 	return db, err
 }
